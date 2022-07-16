@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>UBSリ！</title>
+<link href='https://fonts.googleapis.com/css?family=Oswald:700' rel='stylesheet' type='text/css'>
+<link href="base.css" type="text/css" rel="stylesheet" media="all">
+</head>
+<body>
+
+<div id="stage">
+  <div id="start"><img src="sound/bgm.mp3"></div>
+  <button class="UFO"></button>
+</div>
+<div id="text">
+  <div id="count">COUNT:<span>60</span></div>
+  <div id="score">SCORE:<span>0</span></div>
+  <div id="setume">
+　<div id="setum">SがあるUFOは-1000点
+  <div id="setu">BがあるUFOは-500点
+　<div id="setumet">リがあるUFOは+50点
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+
+var score = 0;  //スコアの点数格納用
+var count = 60;  //残り秒数
+var appearID,timer;  //setInterval用
+
+//配置位置をランダムに取得
+function getPosition(){
+  return {
+    left: Math.floor(Math.random() * 800),  //0～800の整数をランダムで取得
+    top: Math.floor(Math.random() * 450)  //0～450の整数をランダムで取得
+  };
+}
+
+//UFO増殖の処理
+function appear(){
+  appearID = setInterval(function(){
+    var UFONum = Math.ceil(Math.random()*4);
+      if(UFONum == 1){
+         $('.UFO:first-child')
+          .clone()  //button.UFOの複製
+          .addClass('UFO1')
+          .appendTo('#stage')  //複製したbutton.UFOを#stageの最後の要素として追加
+          .css(getPosition())  //追加したbutton.UFOを横800px縦450pxの中にランダム配置
+          .animate({ opacity: 1}, 2000)  //.UFOの透明度を2秒で0から1へ
+          .animate(getPosition(), 7000,function(){
+           $(this).remove();
+          });
+      } else if(UFONum ==2){
+          $('.UFO:first-child')
+          .clone()  //button.UFOの複製
+          .addClass('UFO2')
+          .appendTo('#stage')  //複製したbutton.UFOを#stageの最後の要素として追加
+          .css('background-image','url(img/sman.png)')
+          .css(getPosition())  //追加したbutton.UFOを横800px縦450pxの中にランダム配置
+          .animate({ opacity: 1}, 2000)  //.UFOの透明度を2秒で0から1へ
+          .animate(getPosition(), 3500,function(){
+           $(this).remove();
+          });
+      }else if(UFONum ==3){
+          $('.UFO:first-child')
+          .clone()  //button.UFOの複製
+          .addClass('UFO3')
+          .appendTo('#stage')  //複製したbutton.UFOを#stageの最後の要素として追加
+          .css('background-image','url(img/bman.png)')
+          .css(getPosition())  //追加したbutton.UFOを横800px縦450pxの中にランダム配置
+          .animate({ opacity: 1}, 2000)  //.UFOの透明度を2秒で0から1へ
+          .animate(getPosition(), 3500,function(){
+           $(this).remove();
+          });
+      }else if(UFONum ==4){
+          $('.UFO:first-child')
+          .clone()  //button.UFOの複製
+          .addClass('UFO4')
+          .appendTo('#stage')  //複製したbutton.UFOを#stageの最後の要素として追加
+          .css('background-image','url(img/riman.png)')
+          .css(getPosition())  //追加したbutton.UFOを横800px縦450pxの中にランダム配置
+          .animate({ opacity: 1}, 2000)  //.UFOの透明度を2秒で0から1へ
+          .animate(getPosition(), 3500,function(){
+           $(this).remove();
+          });
+      }
+    
+      
+  }, 500);   //500ミリ秒（0.5秒）毎にsetInterval内の処理を繰り返す
+};
+
+//叩いた時の処理
+$('#stage').on('click', '.UFO', function() {
+    if($(this).attr('class') == 'UFO UFO1'){
+       score += 100;  //scoreの変数に100を加算
+       $('#score span').text(score);  //変数scoreの中身を#score spanに表示させる
+    }else if($(this).attr('class') == 'UFO UFO2'){
+        score -= 1000;  //scoreの変数に200を加算
+       $('#score span').text(score);  //変数scoreの中身を#score spanに表示させる
+    }else if($(this).attr('class') == 'UFO UFO3'){
+        score -= 500;  //scoreの変数に200を加算
+       $('#score span').text(score);  //変数scoreの中身を#score spanに表示させる
+    }else if($(this).attr('class') == 'UFO UFO4'){
+        score += 50;  //scoreの変数に200を加算
+       $('#score span').text(score);  //変数scoreの中身を#score spanに表示させる
+    }
+ 
+  $(this)
+  .css('background-position', 'bottom')  //画像を叩かれているものに切り替え
+  .prop("disabled", true)  //ボタンのクリック無効化
+  .stop(true,false).animate({ opacity: 0}, 500, function(){  //.UFOの透明度を0.5秒で1から0へ
+    $(this).remove();  //アニメーションが終了したら.UFOを削除
+  });
+  
+});
+//スタートボタン押下時の処理
+$('#start').click(function(){
+  appear();  //.UFO増殖関数スタート
+  $(this).animate({ opacity: 0}, 300, function(){  //スタートボタンを透明に
+    $(this).remove();  //透明になったらスタートボタンを削除
+  });
+  timer = setInterval(function(){  //残り時間のカウントダウンの処理
+   if(count <= 0) {  //残り時間0になったら
+      //残り秒数が0以下になったらタイマー（setInterval）をクリアー
+      clearInterval(timer);  //カウントダウンのタイマーをクリアー
+      clearInterval(appearID);  //.UFO増殖のタイマーをクリアー
+      $('.UFO').prop("disabled", true);  //全ての.UFOのクリックを無効に
+      alert("スコアは" + score + "です！");  //スコアをアラートで表示
+      if(score >= 1200) {
+          alert("すごいね！");
+      } else {
+          alert("また頑張ってね！");
+      }
+   } else {  //残り時間1以上であれば
+     count --;  //countの変数を1減らす
+     $('#count span').text(count);  //変数countの中身を#count spanに表示させる
+      //残り秒数が1以上あれば1減らす
+   }
+  }, 1000);   //1000ミリ秒（1秒）毎にsetInterval内の処理を繰り返す
+});
+
+
+</script>
+</body>
+</html>
