@@ -1,0 +1,44 @@
+#stage {
+  margin: 100px auto 0;
+  width: 900px;
+  height: 450px;
+  background: url(img/alien-5659067_960_720.jpg) no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+#text {
+  margin:10px auto;
+  width: 800px;
+}
+#count,#score,#setume,#setum,#setu,#setumet {
+  margin-left: 15px;
+  font-size:18px;
+  line-height:1;
+  text-align:center;
+  font-family: 'Oswald', sans-serif;
+  float: right;
+}
+#count span,#score span {
+  font-size:28px;
+}
+.UFO {
+  width: 30px;
+  height: 30px;
+  background: url(img/) top no-repeat;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  left: 800px;
+  top: 450px;
+  opacity: 0;
+}
+#start {
+  margin: -160px 0 0 -300px;
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  cursor: pointer;
+}
+#start:hover {
+  opacity: 0.8;
+}
